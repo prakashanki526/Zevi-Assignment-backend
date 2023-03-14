@@ -37,6 +37,54 @@ async function addToFavourites(req,res){
     }
 }
 
+async function getAllProducts(req,res){
+    try {
+        const allProductsList = await Product.find({});
+        return res.send(allProductsList);
+    } catch (error) {
+        return res.send(error);
+    }
+}
+
+async function getFilteredProducts(req,res){
+    try {
+        const {name} = req.params
+        const {brand, category, priceMin, priceMax, rating} = req.query;
+
+        let filteredProducts = await Product.find({});
+
+        if(name){
+            filteredProducts = filteredProducts.filter((product) => {
+                return product.name.toLowerCase().match(name.toLowerCase()) ||
+                        product.category.includes(name);
+            })
+        }
+
+        if(brand){
+            filteredProducts = filteredProducts.filter((product) => {
+                return product.brand.toLowerCase().match(brand.toLowerCase());
+            })
+        }
+
+        if(rating){
+            filteredProducts = filteredProducts.filter((product) => {
+                return product.rating == rating;
+            })
+        }
+
+        if(priceMin && priceMax){
+            filteredProducts = filteredProducts.filter((product) => {
+                return product.sellingPrice >= priceMin && product.sellingPrice <= priceMax ;
+            })
+        }
+
+        return res.send(filteredProducts);
+
+    } catch (error) {
+        return res.send(error);
+    }
+}
+
 // async function addToFavourites(req,res){
 //     try {
         
@@ -46,4 +94,4 @@ async function addToFavourites(req,res){
 // }
 
 
-module.exports = {postProduct, addToFavourites};
+module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts};
