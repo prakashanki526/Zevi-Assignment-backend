@@ -1,5 +1,6 @@
 const Product  = require('../models/Product.js');
 const Brand = require('../models/Brand');
+const Category = require('../models/Category');
 
 async function postProduct(req,res){
     try {
@@ -61,7 +62,7 @@ async function getAllProducts(req,res){
 async function getFilteredProducts(req,res){
     try {
         const {name} = req.params
-        const {brand, category, priceMin, priceMax, rating} = req.query;
+        const {brand, priceMin, priceMax, rating} = req.query;
 
         let filteredProducts = await Product.find({});
 
@@ -97,5 +98,36 @@ async function getFilteredProducts(req,res){
     }
 }
 
+async function getTrendingProducts(req,res){
+    try {
+        let products = await Product.find({trending: true});
+        return res.send(products);
+    } catch (error) {
+        return res.send(error);
+    }
+}
 
-module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts, postBrand};
+async function getCategories(req,res){
+    try {
+        let {categoryName} = req.query;
+
+        const categories = await Category.find({})
+        return res.send(categories);
+    } catch (error) {
+        return res.send(error);
+    }
+}
+
+async function postCategory(req,res){
+    try {
+        let {categoryName} = req.query;
+
+        await Category.create({name: categoryName});
+        return res.send({msg: "Category posted"});
+    } catch (error) {
+        return res.send(error);
+    }
+}
+
+
+module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts, postBrand, getTrendingProducts, getCategories, postCategory};
