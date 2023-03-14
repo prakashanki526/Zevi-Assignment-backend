@@ -1,4 +1,5 @@
 const Product  = require('../models/Product.js');
+const Brand = require('../models/Brand');
 
 async function postProduct(req,res){
     try {
@@ -17,6 +18,17 @@ async function postProduct(req,res){
 
         await Product.create(newProduct);
         return res.send({msg: "Product posted"});
+    } catch (error) {
+        return res.send(error);
+    }
+}
+
+async function postBrand(req,res){
+    try {
+        let {brandName} = req.query;
+
+        await Brand.create({name: brandName});
+        return res.send({msg: "Brand posted"});
     } catch (error) {
         return res.send(error);
     }
@@ -85,13 +97,5 @@ async function getFilteredProducts(req,res){
     }
 }
 
-// async function addToFavourites(req,res){
-//     try {
-        
-//     } catch (error) {
-//         return res.send(error);
-//     }
-// }
 
-
-module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts};
+module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts, postBrand};
