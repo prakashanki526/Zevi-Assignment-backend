@@ -61,8 +61,7 @@ async function getAllProducts(req,res){
 
 async function getFilteredProducts(req,res){
     try {
-        const {name} = req.params
-        const {brand, priceMin, priceMax, rating} = req.query;
+        const {name, brand, priceMin, priceMax, rating} = req.query;
 
         let filteredProducts = await Product.find({});
 
@@ -109,8 +108,6 @@ async function getTrendingProducts(req,res){
 
 async function getCategories(req,res){
     try {
-        let {categoryName} = req.query;
-
         const categories = await Category.find({})
         return res.send(categories);
     } catch (error) {
@@ -129,5 +126,14 @@ async function postCategory(req,res){
     }
 }
 
+async function getBrands(req,res){
+    try {
+        const brands = await Brand.find({})
+        return res.send(brands);
+    } catch (error) {
+        return res.send(error);
+    }
+}
 
-module.exports = {postProduct, addToFavourites, getAllProducts, getFilteredProducts, postBrand, getTrendingProducts, getCategories, postCategory};
+
+module.exports = {postProduct, getBrands, addToFavourites, getAllProducts, getFilteredProducts, postBrand, getTrendingProducts, getCategories, postCategory};
